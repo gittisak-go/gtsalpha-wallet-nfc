@@ -1,26 +1,48 @@
 {
   "version": 2,
   "name": "gtsalpha-wallet-nfc",
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
+  "public": true,
+  "buildCommand": "npm run build && npm run build:static",
+  "outputDirectory": ".",
   "env": {
     "SERPAPI_API_KEY": "@serpapi_api_key",
     "MCP_MODE": "http",
-    "PORT": "3010"
+    "PORT": "3010",
+    "NODE_ENV": "production"
   },
   "routes": [
+    {
+      "src": "/api/health",
+      "dest": "/api/health.js"
+    },
+    {
+      "src": "/api/mcp",
+      "dest": "/api/mcp.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/dashboard.html",
+      "dest": "/public/dashboard.html"
+    },
+    {
+      "src": "/app.html",
+      "dest": "/public/app.html"
+    },
     {
       "src": "/health",
       "dest": "/api/health.js"
     },
     {
       "src": "/mcp",
-      "dest": "/api/mcp.js",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+      "dest": "/api/mcp.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/public/index.html"
     }
   ],
   "functions": {

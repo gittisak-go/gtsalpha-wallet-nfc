@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cd mcp-serpapi && npm run dev",
     "build": "cd mcp-serpapi && npm run build",
+    "build:static": "echo 'Static files already in public directory'",
     "start": "cd mcp-serpapi && npm start",
     "test": "echo 'No tests configured'"
   },
@@ -21,5 +22,7 @@
   "license": "MIT",
   "workspaces": [
     "mcp-serpapi"
-  ]
+  ],
+  "dependencies": {},
+  "devDependencies": {}
 }
