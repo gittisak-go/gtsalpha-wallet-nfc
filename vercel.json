@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "name": "gtsalpha-wallet-nfc",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
+  "env": {
+    "SERPAPI_API_KEY": "@serpapi_api_key",
+    "MCP_MODE": "http",
+    "PORT": "3010"
+  },
+  "routes": [
+    {
+      "src": "/health",
+      "dest": "/api/health.js"
+    },
+    {
+      "src": "/mcp",
+      "dest": "/api/mcp.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "functions": {
+    "api/health.js": {
+      "memory": 128,
+      "maxDuration": 10
+    },
+    "api/mcp.js": {
+      "memory": 512,
+      "maxDuration": 30
+    }
+  }
+}

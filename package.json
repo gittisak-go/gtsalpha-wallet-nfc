@@ -1,0 +1,25 @@
+{
+  "name": "gtsalpha-wallet-nfc",
+  "version": "1.0.0",
+  "description": "GtsAlpha Wallet + NFC Scanner - Flutter Crypto Wallet with MCP SerpAPI Server",
+  "type": "module",
+  "scripts": {
+    "dev": "cd mcp-serpapi && npm run dev",
+    "build": "cd mcp-serpapi && npm run build",
+    "start": "cd mcp-serpapi && npm start",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "wallet",
+    "nfc",
+    "crypto",
+    "flutter",
+    "mcp",
+    "serpapi"
+  ],
+  "author": "GtsAlpha Team",
+  "license": "MIT",
+  "workspaces": [
+    "mcp-serpapi"
+  ]
+}
