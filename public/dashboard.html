@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GtsAlpha Wallet - Premium Crypto Wallet with NFC Scanner">
+  <title>GtsAlpha Wallet Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a1a2e;
+      --secondary: #16213e;
+      --accent-green: #00d4aa;
+      --accent-blue: #0a84ff;
+      --accent-orange: #ff8c42;
+      --accent-red: #ff6b6b;
+      --accent-gold: #ffd700;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --border-radius: 20px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-left {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .status-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .battery {
+      width: 24px;
+      height: 12px;
+      border: 1px solid var(--text-secondary);
+      border-radius: 2px;
+      padding: 1px;
+      display: flex;
+      align-items: center;
+    }
+
+    .battery-level {
+      height: 100%;
+      width: 80%;
+      background: var(--accent-green);
+      border-radius: 1px;
+    }
+
+    /* Header */
+    .header {
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .weather-widget {
+      background: linear-gradient(135deg, #5b9ef5 0%, #3b7fd9 100%);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .weather-icon {
+      font-size: 20px;
+    }
+
+    /* QR Scanner Section */
+    .scanner-section {
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    .scanner-circle {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #00d4aa 0%, #00a88a 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 4px solid rgba(0, 212, 170, 0.3);
+      box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 30px rgba(0, 212, 170, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 50px rgba(0, 212, 170, 0.4);
+      }
+    }
+
+    .qr-icon {
+      font-size: 80px;
+      color: white;
+    }
+
+    .scanner-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--accent-green);
+    }
+
+    .scanner-btn {
+      background: linear-gradient(135deg, #00d4aa 0%, #00a88a 100%);
+      color: #000;
+      border: none;
+      border-radius: 24px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .scanner-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+    }
+
+    /* Features Grid */
+    .features-section {
+      padding: 24px 16px;
+      flex: 1;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .feature-card {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* Feature Card Colors */
+    .card-barcode {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+
+    .card-wallet {
+      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    }
+
+    .card-crypto {
+      background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+    }
+
+    .card-food {
+      background: linear-gradient(135deg, #7c2d12 0%, #92400e 100%);
+    }
+
+    .card-document {
+      background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+    }
+
+    .card-id {
+      background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+    }
+
+    .feature-icon {
+      font-size: 40px;
+    }
+
+    .feature-label {
+      font-size: 12px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--secondary);
+      position: sticky;
+      bottom: 0;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-secondary);
+      font-size: 10px;
+      padding: 8px 12px;
+    }
+
+    .nav-item.active {
+      color: var(--accent-green);
+    }
+
+    .nav-icon {
+      font-size: 20px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--secondary);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      max-width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      margin-top: 12px;
+    }
+
+    .modal-text {
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+      }
+    }
+
+    @media (min-width: 481px) {
+      .container {
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <div class="status-left">
+        <span>20:33</span>
+        <span>⚠️</span>
+        <span>📡</span>
+        <span>👤</span>
+        <span>•</span>
+      </div>
+      <div class="status-right">
+        <span>4G</span>
+        <span>📶</span>
+        <div class="battery">
+          <div class="battery-level"></div>
+        </div>
+        <span>80</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="weather-widget">
+        <span class="weather-icon">☁️</span>
+        <span>28°C</span>
+      </div>
+    </div>
+
+    <!-- Scanner Section -->
+    <div class="scanner-section">
+      <div class="scanner-circle">
+        <span class="qr-icon">📱</span>
+      </div>
+      <h2 class="scanner-title">สแกนรหัส QR</h2>
+      <button class="scanner-btn" onclick="openScanner()">เริ่มสแกน</button>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="features-section">
+      <div class="features-grid">
+        <div class="feature-card card-barcode" onclick="openFeature('barcode')">
+          <span class="feature-icon">📊</span>
+          <span class="feature-label">สแกนบาร์โค้ด</span>
+        </div>
+        <div class="feature-card card-wallet" onclick="openFeature('wallet')">
+          <span class="feature-icon">💵</span>
+          <span class="feature-label">สแกนธนบัตร</span>
+        </div>
+        <div class="feature-card card-crypto" onclick="openFeature('crypto')">
+          <span class="feature-icon">💎</span>
+          <span class="feature-label">สแกนเหรียญ</span>
+        </div>
+        <div class="feature-card card-food" onclick="openFeature('food')">
+          <span class="feature-icon">🍔</span>
+          <span class="feature-label">สแกนอาหาร</span>
+        </div>
+        <div class="feature-card card-document" onclick="openFeature('document')">
+          <span class="feature-icon">📄</span>
+          <span class="feature-label">สแกนเอกสาร</span>
+        </div>
+        <div class="feature-card card-id" onclick="openFeature('id')">
+          <span class="feature-icon">👤</span>
+          <span class="feature-label">นามบัตร</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="switchNav(this)">
+        <span class="nav-icon">🔐</span>
+        <span>กำลังสแกน</span>
+      </div>
+      <div class="nav-item" onclick="switchNav(this)">
+        <span class="nav-icon">🔍</span>
+        <span>ค้นพบ</span>
+      </div>
+      <div class="nav-item" onclick="switchNav(this)">
+        <span class="nav-icon">➕</span>
+        <span>สร้าง</span>
+      </div>
+      <div class="nav-item" onclick="switchNav(this)">
+        <span class="nav-icon">⚙️</span>
+        <span>จัน</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="featureModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h2 class="modal-title" id="modalTitle">Feature Title</h2>
+      <p class="modal-text" id="modalText">Feature description will appear here.</p>
+    </div>
+  </div>
+
+  <script>
+    const featureDescriptions = {
+      barcode: {
+        title: '📊 สแกนบาร์โค้ด',
+        text: 'สแกนบาร์โค้ดสินค้าเพื่อดูข้อมูลราคา รายละเอียด และการเปรียบเทียบราคาจากหลายร้านค้า'
+      },
+      wallet: {
+        title: '💵 สแกนธนบัตร',
+        text: 'ตรวจสอบความถูกต้องของธนบัตร ดูข้อมูลทางประวัติศาสตร์ และค่าเก่าของธนบัตร'
+      },
+      crypto: {
+        title: '💎 สแกนเหรียญ',
+        text: 'ติดตามราคาเหรียญสกุลเงินดิจิทัล BTC, ETH, BNB และอื่นๆ แบบ real-time'
+      },
+      food: {
+        title: '🍔 สแกนอาหาร',
+        text: 'สแกนอาหารเพื่อดูข้อมูลโภชนาการ แคลอรี่ และส่วนประกอบ'
+      },
+      document: {
+        title: '📄 สแกนเอกสาร',
+        text: 'สแกนเอกสารสำคัญ บันทึกเป็นไฟล์ดิจิทัล และสร้างสำเนาอิเล็กทรอนิกส์'
+      },
+      id: {
+        title: '👤 นามบัตร',
+        text: 'สแกนบัตรประชาชน หนังสือเดินทาง และเอกสารประจำตัวอื่นๆ ด้วย OCR'
+      }
+    };
+
+    function openScanner() {
+      alert('🔍 เปิดกล้องสแกน QR Code...\n\nในแอปพลิเคชัน Flutter จริง ฟีเจอร์นี้จะเปิดกล้องและสแกน QR code');
+    }
+
+    function openFeature(featureName) {
+      const feature = featureDescriptions[featureName];
+      if (feature) {
+        document.getElementById('modalTitle').textContent = feature.title;
+        document.getElementById('modalText').textContent = feature.text;
+        document.getElementById('featureModal').classList.add('active');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('featureModal').classList.remove('active');
+    }
+
+    function switchNav(element) {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      element.classList.add('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('featureModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
